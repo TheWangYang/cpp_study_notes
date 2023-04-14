@@ -206,3 +206,254 @@ C++11中使用前缀u表示char16_t字符常量和字符串常量；
 并使用前缀U表示char32_t常量；
 
 ### bool类型
+
+C++中一般将0解释为false，将1解释为true；
+
+任何非零值都是true；
+零值表示false；
+
+## const限定符
+
+C++中使用const关键字来修改变量声明和初始化；
+例如：
+
+```
+const int Months = 12;
+```
+
+const限定符，限定了声明的含义；
+
+一种常见的做法是将const限定符修饰的常量的首字母大写，表示这是一个常量；
+还有一种风格是将常量的整个名称大写；
+
+如果在定义常量的时候没有赋值，那么该常量的值是不确定的，且无法修改；
+
+## 浮点数
+
+C++中两种书写浮点数的方式：
+
+1. 使用标准的小数点写法；
+2. E表示法，例如：3.46E6；其中E6表示10的6次方；E表示法适合非常大的数的非常小的数；
+
+C++中有三种浮点数：float/double/long double；
+
+float至少32位，double至少48位，且不少于float；
+long doulbe至少和double一样多；
+
+通常float的有效位数为：32位，double的有效位数为64位，long double有效位数至少和double一样多；
+
+上述三种类型的指数范围至少在-37,37之间；
+
+### cout输出浮点数说明
+
+通常cout会将浮点数小数点后的00自动删除掉，但是使用了cout.setf()之后将覆盖这种行为；
+例如下列程序：
+
+```
+int main()
+{
+    std::cout.setf(std::ios_base::fixed, std::ios_base::floatfield);
+    float tub = 10.0 / 3.0;
+    double mint = 10.0 / 3.0;
+    const float million = 1.0e6;
+
+    std::cout << "tub = " << tub;
+    std::cout << ", a million tubs = " << million * tub;
+
+    std::cout << ",\nand ten million tubs = ";
+    std::cout << 10 * million * tub << std::endl;
+
+    std::cout << "mint = " << mint << " and a million mints = ";
+    std::cout << million * mint << std::endl;
+    return 0;
+}
+```
+
+上述程序对应的输出为：
+
+```
+tub = 3.333333, a million tubs = 3333333.250000,
+and ten million tubs = 33333332.000000
+mint = 3.333333 and a million mints = 3333333.333333
+```
+
+从上述a million tubs可以看到，由float只保留7位有效位，因此该结果在第7个3之后就失真了；
+
+同时，对double由于其有效位为：13位，因此a million mints还是得到正确的输出的；
+
+### 浮点常量
+
+默认情况下，类似如下数字都是double类型的：
+
+```
+8.24
+2.4E8
+```
+
+如果向指定为float类型的常量，那么在数字的后边使用f或F作为后缀即可；
+
+对long double类型使用l或L后缀；
+
+浮点运算的速度通常比整数慢一些，且精度将降低；
+
+一个浮点数运算导致精度降低的例子：
+
+```
+// 浮点数运算导致精度降低的例子
+int main()
+{
+    using namespace std;
+    float a = 2.34E+22f;
+    float b = a + 1.0f;
+
+    cout << "a = " << a << endl;
+    cout << "b - a = " << b - a << endl;
+
+    return 0;
+}
+```
+
+上述程序的输出如下：
+
+```
+a = 2.34e+22
+b - a = 0
+```
+
+原因：这是因为float类型的浮点数的有效位为6位或7位，那么上述的2.34e+22表示小数点左边有23位的数字，加上1之后相当于在第23位上加了1，这对a这个是用float表示的小数没有任何影响；因此最终的结果将会出现错误；
+
+C++11中新增类型为：long long, bool, char, wchar_t；
+符号整数, 无符号整数统称为整型；
+
+C++11中新增了char16_t和char32_t；
+float double long double统称为浮点型；
+
+## C++算术运算符
+
+/运算符为除法运算，如果两个数均为整数，那么最后结果的小数部分将被丢弃；
+
+运算符重载是C++中的重要的OOP属性；
+
+### 类型转换
+
+C++有很多种类型转换：
+
+1. 将一种算术类型的值赋值给另外一种算术类型的变量时；
+2. 表达式中包含不同类型时，C++将值进行转换；
+3. 将参数传递给函数时，C++将值进行转换；
+
+例如：
+
+```
+short thirty = 30;
+long l = thirty;
+```
+
+上述例子中，thirty本来应该占16位，当其被赋值给long类型的变量l时，系统自动将thirty的值30转换为32位的long类型并存储到l中，原来的thirty中对应的值30不变；
+
+注意：当将一个很大的long值赋值给有效位数较小的float时，会出现如下情况：
+
+```
+long l = 2111222333;
+float f = l;
+
+f = 2.11122E9;
+```
+
+float为2.11122E9是因为float只有6位有效数字；
+
+一些类型转换可能会出现的问题：
+
+```
+double -> float: 精度（有效位）降低，值可能超出目标类型的取值范围，这种情况下最终的float类型的变量的值将是不确定的；
+
+
+浮点类型 -? 整型: 小数部分丢失，原来的值可能超出目标类型的取值范围，结果将是不确定的；
+
+
+将较大的整型转换为较小的整型: 原来的值可能超出目标类型的取值范围，通常只复制右边的字节；
+
+```
+
+C++使用列表初始化时发生的转换{}
+
+例如如下例子：
+
+```
+int x = 66;
+int tmp = {x}; //是不允许的
+```
+
+上述将x使用列表初始化的方式赋值给tmp变量是不允许的，那是因为编译器不会追踪x的值的变化，同时会认为是有风险的这个操作；
+
+### 表达式中的转换
+
+C++中将bool char unsigned char signed char short值自动转换为int；
+
+这些转换被称为整型提升；
+
+代码举例：
+
+```
+short t1 = 20;
+short t2 = 21;
+
+short final = t1 + t2;
+```
+
+上述过程中，C++会自动将t1 t2转换为int类型的值，然后计算结果，最终将结果转换为目标类型short；
+这是因为计算机内部int类型可能计算最快；
+
+还存在如下的一些整型提升：
+
+1. 如果short比int短，那么unsigned short类型将被转换为int；
+2. 如果两种类型的长度相同，则unsigned short类型将被转换为unsigned int；
+
+同时，wchar_t会被提升为，如下几个类型首先能够存储wchar_t的取值范围类型：
+int, unsigned int, long, unsigned long;
+
+当涉及到两种类型的运算时，较小的类型将会被转换为较大的类型；
+
+有符号整型按照级别从高到低为：long long, long, int, short, signed char；
+无符号整型的顺序与有符号整型相同；
+类型char, signed char, unsigned char的级别相同；
+类型bool的级别最低；
+wchar_t, char16_t, char32_t的级别与其底层类型相同；
+
+### 传递参数时的转换
+
+传递参数时的类型转换通常由C++函数原型控制；
+
+如果取消原型对参数传递的控制，C++将对char和short（signed和unsigned）类型应用整型提升；
+此外，在这种情况下，C++将float参数提升为double；
+
+### 强制类型转换
+
+C++还允许通过强制类型转换机制进行显式类型转换；具体来说可以使用如下代码：
+
+```
+int tmp = 10;
+(long) tmp;
+long (tmp);
+```
+
+强制类型转换，不会修改tmp变量本身，而是创建一个新的、指定类型的值；
+
+C++中还引入了四个强制类型转换运算符：
+static_cast<>，具体使用如下：
+
+```
+static_cast<long> (tmp);
+```
+
+这种使用运算符的方式比传统的强制类型转换更严格；
+
+### C++11中的auto声明
+
+处理STL模板库中的复杂类型时，可以使用auto关键字；
+
+```
+std::vector<double> scores;
+auto pv = scores.begin();
+```
+
