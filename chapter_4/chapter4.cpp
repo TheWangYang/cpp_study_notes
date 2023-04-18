@@ -83,37 +83,90 @@
 // }
 
 
-//4.11程序清单
-struct inflatable
-{        
-    char name[20];
-    float volume;
-    double price;
-    std::string str_test;
-};
+// //4.11程序清单
+// struct inflatable
+// {        
+//     char name[20];
+//     float volume;
+//     double price;
+//     std::string str_test;
+// };
 
+// int main(){
+//     using namespace std;
+//     inflatable test1 = {
+//         "test test",
+//         1.88,
+//         29.99,
+//         "this is string from test1."
+//     };
+
+//     inflatable test2 = {
+//         "test2",
+//         898,
+//         899,
+//         "this a string from test2."
+//     };
+
+//     cout << "test1 name: " << test1.name << endl;
+//     cout << "test1 string: " << test1.str_test << endl;
+
+
+//     cout << "test2 name: " << test2.name;
+//     cout << "test2 string: " << test2.str_test << endl;
+
+//     return 0;
+// }
+
+
+
+// 4.14指针使用
+// int main(){
+//     using namespace std;
+//     int number = 8;
+//     double double_number = 10.0;
+
+//     cout << "number value = " << number << endl;
+//     cout << "number value address = " << &number << endl;
+
+//     cout << "double_number address = " << &double_number << endl;
+//     return 0;
+// }
+
+
+
+// // 4.15指针使用示例
+// int main(){
+//     using namespace std;
+//     int updates = 6;
+//     int *p_updates;
+//     p_updates = &updates;
+
+
+//     cout << "updates = " << updates << endl;
+//     cout << ", *p_updates = " << *p_updates << endl;
+
+
+//     cout << "Address: &updates = " << &updates << endl;
+//     cout << "Address using p_updates = " << p_updates << endl;
+
+//     *p_updates = *p_updates + 1;
+//     cout << "new updates using *p_updates + 1 = " << *p_updates << endl;
+
+//     return 0;
+// }
+
+
+// 4.17程序清单，演示new运算符的使用
 int main(){
     using namespace std;
-    inflatable test1 = {
-        "test test",
-        1.88,
-        29.99,
-        "this is string from test1."
-    };
+    int nights = 1001;
+    
+    int* pt = new int;
+    *pt = 1001;
 
-    inflatable test2 = {
-        "test2",
-        898,
-        899,
-        "this a string from test2."
-    };
-
-    cout << "test1 name: " << test1.name << endl;
-    cout << "test1 string: " << test1.str_test << endl;
-
-
-    cout << "test2 name: " << test2.name;
-    cout << "test2 string: " << test2.str_test << endl;
-
+    cout << "nights value = " << nights << ", location = " << &nights << endl;
+    cout << "one int value = " << *pt << ", its location = " << pt << endl;
+    
     return 0;
 }

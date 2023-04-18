@@ -386,3 +386,223 @@ band = 2000;//是错误的
 ```
 
 枚举量是整型，可以被提升为int类型，但是int类型不能自动转换为枚举类型；
+
+```
+band = 3;//合法的
+color = 3 + red;//非法的
+band = red + greeen;//后边的red+green是合法的，但是相加之后得到的是int类型的数，赋值给枚举类是非法的
+```
+
+如果int值是有效的，那么使用强制类型转换是可以赋值给枚举变量的：
+
+```
+band = test(3);
+band = test(400003);//不会出错，但是不会得到可靠的结果；
+```
+
+可以用枚举类来定义switch中使用的符号常量；
+
+### 设置枚举量的值
+
+enum Test{red = 0, green = 1, ...};
+
+指定的值必须是整数；
+
+还可以创建多个值相同的枚举量：
+
+```
+enum {zero, number = 0, ...};
+```
+
+### 枚举的取值范围
+
+通过强制类型转换，可以将取值范围中的任何整数值赋值给枚举变量，即使这个值不是枚举值：
+
+```
+enum bits{one = 1, two = 2, ... , eight = 8};
+
+bits myflag;
+
+
+myflag = bits(6);
+```
+
+其中6虽然不是枚举值，但是位于枚举值定义的取值范围内；
+
+枚举类的取值范围的上限确定：找到大于枚举类中最大值的，最小的2的幂次，然后减1就是枚举类的取值上限；
+
+枚举类取值范围的下限确定：如果枚举类中最小值为0，那么就是0；如果为负数，那么使用和找上限相同的方法，但是注意加上负号；
+
+注意：选择使用多少空间来存储枚举由编译器决定。
+
+对取值较小的枚举类使用一个字节或更少的空间；
+而对于包含long类型值的枚举，使用4个字节；
+
+## 指针和自由存储空间
+
+指针存储的是变量的地址而不是值本身；
+
+使用&来得到变量的地址，就可以得到的对应的位置；
+
+```
+int main(){
+    using namespace std;
+    int number = 8;
+    double double_number = 10.0;
+
+    cout << "number value = " << number << endl;
+    cout << "number value address = " << &number << endl;
+
+    cout << "double_number address = " << &double_number << endl;
+    return 0;
+}
+```
+
+上述cout打印出来的变量地址使用十六进制表示法；
+
+注意：有些系统可能不会把两个变量存储在相邻的内存单元中；
+
+使用常规变量时，值是指定的量，而地址为派生量；
+
+C++中采用关键字new请求正确数量的内存以及使用指针来跟踪新分配的内存的位置；
+
+使用*运算符被称为间接值，或解除引用运算符，将其应用于指针，可以得到该地址处存储的值；
+
+指针使用示例：
+
+```
+int main(){
+    using namespace std;
+    int updates = 6;
+    int *p_updates;
+    p_updates = &updates;
+
+
+    cout << "updates = " << updates << endl;
+    cout << ", *p_updates = " << *p_updates << endl;
+
+
+    cout << "Address: &updates = " << &updates << endl;
+    cout << "Address using p_updates = " << p_updates << endl;
+
+    *p_updates = *p_updates + 1;
+    cout << "new updates using *p_updates + 1 = " << *p_updates << endl;
+
+    return 0;
+}
+```
+
+### 声明和初始化指针
+
+指针声明的时候需要制定指针准备指向的数据的类型。
+
+```
+int * p_updates;
+```
+
+可以说p_updates是指向int类型的指针；
+*p_updates是int类型的；
+
+C++程序员使用如下格式定义指针：
+
+```
+int* pointer;
+```
+
+C程序员使用如下格式定义指针：
+
+```
+int *point;
+```
+
+int*是一种类型，指向int的指针；
+
+下面的声明创建一个指针p1和一个int变量p2；
+
+```
+int* p1, p2;
+```
+
+对每个指针变量都需要使用int*来指定；
+
+### 指针的危险
+
+C++中创建指针时，计算机系统将分配用来存储地址的内存，但不会分配用来存储指针所指向数据的内存；
+
+```
+long* fellow;
+*fellow = 223333;
+```
+
+上述将数据223333放置到*fellow指针创建时随机对应的地址上；
+
+### 指针和数字
+
+使用如下强制类型转换可以实现将数字赋值给指针：
+
+```
+int* pointer;
+pointer = (int*)0xB80000;
+```
+
+### 使用new来分配内存
+
+指针真正的使用地方在于，可以在运行阶段，分配未命名的内存以存储值，这种情况只能通过指针来访问内存；
+
+```
+int* ptr = new int;
+```
+
+new int告诉程序，需要适合存储int类型值的内存，然后程序寻找到一个适合存储int类型数据的内存并把对应的地址赋值给ptr；
+
+使用上述ptr指针指向对应的数据对象（数据对象指的是为数据项分配的内存块）；
+变量也是数据对象；
+
+```
+// 4.17程序清单，演示new运算符的使用
+int main(){
+    using namespace std;
+    int nights = 1001;
+    
+    int* pt = new int;
+    *pt = 1001;
+
+    cout << "nights value = " << nights << ", location = " << &nights << endl;
+    cout << "one int value = " << *pt << ", its location = " << pt << endl;
+    
+    return 0;
+}
+```
+
+对于指针，使用new分配的内存块通常与常规变量声明分配的内存块不同，变量的值被存储在栈stack的内存区域中；
+使用new声明的指针对应的值存储在堆heap内存区域或自由存储区中；
+
+C++中值为0的指针被称为null ptr指针；
+
+### 使用delete释放内存
+
+使用完内存之后，可以使用delete将对应的内存返还给内存池中；
+
+```
+int* ptr = new int;
+
+delete ptr;
+```
+
+上述代码可以释放ptr指向的内存，但是不会删除指针ptr本身；
+
+注意：一定要配对的使用new 和 delete，否则会发生内存泄漏；
+
+注意：不能使用delete来释放常规声明变量所获得的内存：
+
+```
+int* ps = new int;
+delete ps;
+delete ps;//不允许重复释放，将会发生不确定的事情
+
+int judge = 5;
+int* pt = &judge;
+delete pt;//不允许
+```
+
+### 使用new来创建动态数组
