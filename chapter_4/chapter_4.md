@@ -606,3 +606,91 @@ delete pt;//不允许
 ```
 
 ### 使用new来创建动态数组
+
+在编译时给数组分配内存称为静态联编（static binding）；
+使用静态联编时，必须在编写程序时指定数组的长度；
+使用动态联编时，程序在运行时确定数组的长度；
+
+```
+int* psome = new int[10];
+```
+
+new运算符返回第一个元素的地址，该地址被赋值给指针psome；
+
+使用如下命令释放内存：
+
+```
+delete [] psome;
+```
+
+上述的方括号表示，应释放整个数组，而不是指针指向的元素；
+
+### 使用动态数组
+
+```
+int* psome = new int[10];
+```
+
+psome向后移动4个字节之后将指向数组中的下一个元素；
+
+实际上一种访问数组元素所有方法：只需要将指针当作数组名使用index下标进行访问即可；
+
+```
+// 4.18动态数组的使用
+int main(){
+    using namespace std;
+    double* p3 = new double[3];
+
+    p3[0] = 0.1;
+    p3[1] = 0.2;
+    p3[2] = 0.3;
+
+    cout << "p3[0] = " << p3[0] << endl;
+
+    p3 = p3 + 1;
+
+    cout << "now p3[0] = " << p3[0] << endl;
+
+    p3 = p3 - 1;
+    delete [] p3;
+
+    return 0;
+}
+```
+
+### 指针、数组和指针算术
+
+指针+1之后，增加的量为其指向的类型的字节数；
+
+C++将数组名解释为地址；
+
+```
+int main(){
+    using namespace std;
+    double wages[3] = {10000.0, 300.5, 5000.0};
+    short stacks[3] = {3, 2, 1};
+
+    double* pw = wages;
+    short* ps = stacks;
+
+
+    cout << "pw = " << pw << ", *pw = " << *pw << endl;
+    pw = pw + 1;
+    cout << "add 1 to the pw pointer:\n";
+    cout << "pw = " << pw  << ", *pw = " << *pw <<endl;
+
+    return 0;
+}
+```
+
+C++中将stacks[1]看做*(stacks+1)；
+
+注意：sizeof(arrayname)时，C++不会将数组名字解释为地址；
+
+数组名被解释为第一个元素的地址，而对数组名应用地址元素符时，得到的是整个数组的地址；
+
+```
+&tell等价于&tell[0];
+shot tell[10];
+short (*ps) [20] = &tell;//这表示将short类型的10长度的数组的地址给ps指针；
+```

@@ -157,16 +157,57 @@
 // }
 
 
-// 4.17程序清单，演示new运算符的使用
+// // 4.17程序清单，演示new运算符的使用
+// int main(){
+//     using namespace std;
+//     int nights = 1001;
+    
+//     int* pt = new int;
+//     *pt = 1001;
+
+//     cout << "nights value = " << nights << ", location = " << &nights << endl;
+//     cout << "one int value = " << *pt << ", its location = " << pt << endl;
+
+//     return 0;
+// }
+
+// // 4.18动态数组的使用
+// int main(){
+//     using namespace std;
+//     double* p3 = new double[3];
+
+//     p3[0] = 0.1;
+//     p3[1] = 0.2;
+//     p3[2] = 0.3;
+
+//     cout << "p3[0] = " << p3[0] << endl;
+
+//     p3 = p3 + 1;
+
+//     cout << "now p3[0] = " << p3[0] << endl;
+
+//     p3 = p3 - 1;
+//     delete [] p3;
+
+//     return 0;
+// }
+
+// 4.19程序示例
 int main(){
     using namespace std;
-    int nights = 1001;
-    
-    int* pt = new int;
-    *pt = 1001;
+    double wages[3] = {10000.0, 300.5, 5000.0};
+    short stacks[3] = {3, 2, 1};
 
-    cout << "nights value = " << nights << ", location = " << &nights << endl;
-    cout << "one int value = " << *pt << ", its location = " << pt << endl;
-    
+    double* pw = wages;
+    short* ps = stacks;
+
+
+    cout << "pw = " << pw << ", *pw = " << *pw << endl;
+    pw = pw + 1;
+    cout << "add 1 to the pw pointer:\n";
+    cout << "pw = " << pw  << ", *pw = " << *pw <<endl;
+
     return 0;
 }
+
+
